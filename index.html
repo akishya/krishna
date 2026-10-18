@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>GitaGuru — Bhagavad Gita AI Coach</title>
+  <meta name="description" content="Personalized Bhagavad Gita wisdom with AI voice, Lord Krishna, and all 18 chapters."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/themes.css">
+</head>
+<body>
+<!-- ===== ANIMATED KRISHNA THEME LOADER ===== -->
+<div id="krishnaLoader" class="loader-overlay">
+  <div class="loader-cosmic-bg"></div>
+  <div class="loader-content">
+    <div class="loader-img-wrap">
+      <div class="loader-aura"></div>
+      <div class="loader-aura2"></div>
+      <img src="krishna.png" alt="Lord Krishna Loading" />
+    </div>
+    <div class="loader-title">GitaGuru</div>
+    <div class="loader-sub">Awakening Cosmic Wisdom...</div>
+    <div class="loader-bar-track">
+      <div class="loader-bar-fill"></div>
+    </div>
+  </div>
+</div>
+
+<div class="cosmic-bg"></div>
+<canvas id="starCanvas" style="position:fixed;inset:0;z-index:0;pointer-events:none;"></canvas>
+
+<!-- ===== ONBOARDING ===== -->
+<div id="onboarding" class="page hidden">
+  <div style="text-align:center;margin-bottom:18px;position:relative;z-index:2;">
+    <div style="font-family:'Cinzel',serif;font-size:14px;color:var(--gold-l);letter-spacing:2px;margin-bottom:4px;">ॐ GITA GURU ॐ</div>
+    <div style="font-size:11px;color:var(--t2);">Your personalized Bhagavad Gita AI mentor</div>
+  </div>
+  <div class="ob-card" style="position:relative;z-index:2;" id="obCard">
+    <div class="ob-header">
+      <div class="ob-logo">🪷</div>
+      <div class="ob-title" id="obTitle">Choose Your Language</div>
+      <div class="ob-sub" id="obSub">अपनी भाषा चुनिए — Pick your preferred language</div>
+    </div>
+    <div class="step-dots">
+      <div class="step-dot active" id="sd1"></div>
+      <div class="step-dot" id="sd2"></div>
+      <div class="step-dot" id="sd3"></div>
+    </div>
+    <!-- STEP 1: LANGUAGE -->
+    <div id="step1">
+      <div class="lang-grid">
+        <div class="lang-tile sel" data-lang="en" data-code="en-IN" onclick="selLang(this)"><span class="lf">🇬🇧</span><span class="ln">English</span><span class="ls">English</span></div>
+        <div class="lang-tile" data-lang="hi" data-code="hi-IN" onclick="selLang(this)"><span class="lf">🇮🇳</span><span class="ln">हिन्दी</span><span class="ls">Hindi</span></div>
+        <div class="lang-tile" data-lang="hinglish" data-code="en-IN" onclick="selLang(this)"><span class="lf">🌀</span><span class="ln">Hinglish</span><span class="ls">Hindi+English</span></div>
+        <div class="lang-tile" data-lang="mr" data-code="mr-IN" onclick="selLang(this)"><span class="lf">🇮🇳</span><span class="ln">मराठी</span><span class="ls">Marathi</span></div>
+        <div class="lang-tile" data-lang="gu" data-code="gu-IN" onclick="selLang(this)"><span class="lf">🇮🇳</span><span class="ln">ગુજરાતી</span><span class="ls">Gujarati</span></div>
+        <div class="lang-tile" data-lang="bn" data-code="bn-IN" onclick="selLang(this)"><span class="lf">🇮🇳</span><span class="ln">বাংলা</span><span class="ls">Bengali</span></div>
+        <div class="lang-tile" data-lang="ta" data-code="ta-IN" onclick="selLang(this)"><span class="lf">🇮🇳</span><span class="ln">தமிழ்</span><span class="ls">Tamil</span></div>
+        <div class="lang-tile" data-lang="te" data-code="te-IN" onclick="selLang(this)"><span class="lf">🇮🇳</span><span class="ln">తెలుగు</span><span class="ls">Telugu</span></div>
+        <div class="lang-tile" data-lang="kn" data-code="kn-IN" onclick="selLang(this)"><span class="lf">🇮🇳</span><span class="ln">ಕನ್ನಡ</span><span class="ls">Kannada</span></div>
+        <div class="lang-tile" data-lang="ml" data-code="ml-IN" onclick="selLang(this)"><span class="lf">🇮🇳</span><span class="ln">മലയാളം</span><span class="ls">Malayalam</span></div>
+        <div class="lang-tile" data-lang="pa" data-code="pa-IN" onclick="selLang(this)"><span class="lf">🇮🇳</span><span class="ln">ਪੰਜਾਬੀ</span><span class="ls">Punjabi</span></div>
+        <div class="lang-tile" data-lang="ur" data-code="ur-PK" onclick="selLang(this)"><span class="lf">🇵🇰</span><span class="ln">اردو</span><span class="ls">Urdu</span></div>
+      </div>
+      <div class="ob-nav"><div></div><button class="btn-gold" onclick="goStep(2)">Next →</button></div>
+    </div>
+
+    <!-- STEP 2: PROFILE -->
+    <div id="step2" style="display:none;">
+      <div class="form-section">
+        <label class="form-label">Your Age</label>
+        <div class="age-row">
+          <input type="range" id="ageSlider" min="13" max="80" value="28" class="age-input" oninput="document.getElementById('ageNum').textContent=this.value" style="cursor:pointer;"/>
+          <div class="age-display" id="ageNum">28</div>
+        </div>
+      </div>
+      <div class="form-section">
+        <label class="form-label">Gender</label>
+        <div class="gender-row">
+          <div class="gender-btn sel" data-g="male" onclick="selGender(this)">♂ Male</div>
+          <div class="gender-btn" data-g="female" onclick="selGender(this)">♀ Female</div>
+          <div class="gender-btn" data-g="other" onclick="selGender(this)">⚧ Other</div>
+        </div>
+      </div>
+      <div class="form-section">
+        <label class="form-label">Profession</label>
+        <div class="prof-grid">
+          <div class="prof-btn sel" data-p="founder" onclick="selProf(this)"><span class="pe">🚀</span>Founder/CEO</div>
+          <div class="prof-btn" data-p="manager" onclick="selProf(this)"><span class="pe">💼</span>Manager</div>
+          <div class="prof-btn" data-p="doctor" onclick="selProf(this)"><span class="pe">🏥</span>Doctor</div>
+          <div class="prof-btn" data-p="student" onclick="selProf(this)"><span class="pe">🎓</span>Student</div>
+          <div class="prof-btn" data-p="teacher" onclick="selProf(this)"><span class="pe">👩‍🏫</span>Teacher</div>
+          <div class="prof-btn" data-p="engineer" onclick="selProf(this)"><span class="pe">💻</span>Engineer/IT</div>
+          <div class="prof-btn" data-p="lawyer" onclick="selProf(this)"><span class="pe">⚖️</span>Lawyer</div>
+          <div class="prof-btn" data-p="finance" onclick="selProf(this)"><span class="pe">💰</span>Finance</div>
+          <div class="prof-btn" data-p="artist" onclick="selProf(this)"><span class="pe">🎨</span>Artist</div>
+          <div class="prof-btn" data-p="homemaker" onclick="selProf(this)"><span class="pe">🏠</span>Homemaker</div>
+          <div class="prof-btn" data-p="govt" onclick="selProf(this)"><span class="pe">🏛️</span>Govt/Civil</div>
+          <div class="prof-btn" data-p="other" onclick="selProf(this)"><span class="pe">👤</span>Other</div>
+        </div>
+      </div>
+      <div class="ob-nav">
+        <button class="btn-outline" onclick="goStep(1)">← Back</button>
+        <button class="btn-gold" onclick="goStep(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: FOCUS -->
+    <div id="step3" style="display:none;">
+      <div class="form-section">
+        <label class="form-label">What would you like to focus on? (Choose all that apply)</label>
+        <div class="focus-grid">
+          <div class="focus-btn sel" data-f="career" onclick="togFocus(this)"><span class="fe">⚡</span>Career & Work</div>
+          <div class="focus-btn" data-f="relationships" onclick="togFocus(this)"><span class="fe">💞</span>Relationships</div>
+          <div class="focus-btn" data-f="stress" onclick="togFocus(this)"><span class="fe">🧠</span>Stress & Mental Peace</div>
+          <div class="focus-btn" data-f="purpose" onclick="togFocus(this)"><span class="fe">🎯</span>Purpose & Direction</div>
+          <div class="focus-btn" data-f="leadership" onclick="togFocus(this)"><span class="fe">🤝</span>Leadership & Team</div>
+          <div class="focus-btn" data-f="money" onclick="togFocus(this)"><span class="fe">💸</span>Money & Finances</div>
+          <div class="focus-btn" data-f="ethics" onclick="togFocus(this)"><span class="fe">⚖️</span>Ethics & Values</div>
+          <div class="focus-btn" data-f="health" onclick="togFocus(this)"><span class="fe">🌊</span>Health & Life Change</div>
+        </div>
+      </div>
+      <div class="ob-hint">Krishna will personalize every teaching, shloka, and example for your age, profession, and chosen focus areas.</div>
+      <div class="ob-nav">
+        <button class="btn-outline" onclick="goStep(2)">← Back</button>
+        <button class="btn-gold" onclick="startJourney()">🪷 Begin My Journey</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPTER MODAL ===== -->
+<div id="chapterModal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-badge" id="mBadge">1</div>
+      <div class="modal-title-block">
+        <div class="modal-ch-label" id="mLabel">Chapter 1</div>
+        <div class="modal-ch-title" id="mTitle"></div>
+        <div class="modal-yoga" id="mYoga"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-theme-pill" id="mTheme"></div>
+      <p class="modal-teaching" id="mTeaching"></p>
+      
+      <!-- Complete Verse Search & Grid -->
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.25);border-radius:var(--rs);padding:12px 14px;">
+        <div class="modal-section-head" style="margin-bottom:8px;">📖 Browse All 700 Verses</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <span style="font-size:11px;color:var(--t2);font-weight:600;white-space:nowrap;">SELECT VERSE:</span>
+          <select id="mVerseSelect" onchange="loadSelectedVerse()" style="flex:1;background:rgba(8,9,32,.8);border:1px solid rgba(201,168,76,.4);border-radius:var(--rs);padding:6px 10px;color:var(--cream);font-size:12.5px;outline:none;cursor:pointer;"></select>
+        </div>
+        <div id="mSelectedVerseCard"></div>
+      </div>
+
+      <div><div class="modal-section-head" id="mShlokasHead">📿 Key Shlokas</div><div class="shloka-list" id="mShlokas"></div></div>
+      <div><div class="modal-section-head" id="mExampleHead">💼 Example for You</div><div class="modal-example-box" id="mExample"></div></div>
+      <div><div class="modal-section-head" id="mActionHead">✅ Your Action</div><div class="modal-action-box"><div style="font-size:15px;flex-shrink:0;">🎯</div><div style="font-size:12px;color:#86efac;" id="mAction"></div></div></div>
+      <button class="modal-ask-btn" id="mAskBtn">💬 Ask Krishna about this chapter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div id="mainApp" class="page hidden" style="display:flex;">
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="logo-icon">🪷</div>
+        <div class="logo-text"><h1>GitaGuru</h1><p>Bhagavad Gita AI Coach</p></div>
+      </div>
+      <div class="sidebar-tabs">
+        <div class="stab active" id="tab-coach" onclick="switchTab('coach')">🧘 Coach</div>
+        <div class="stab" id="tab-chapters" onclick="switchTab('chapters')">📚 Chapters</div>
+        <div class="stab" id="tab-dialogue" onclick="switchTab('dialogue')">💬 Dialogue</div>
+      </div>
+    </div>
+    <div class="sidebar-panel active" id="panel-coach">
+      <div>
+        <div class="section-label">⚖️ Guna Profile</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div class="guna-row"><div class="guna-label">Sattva</div><div class="guna-bar-track"><div class="guna-bar-fill s" id="sattvBar" style="width:33%"></div></div><div class="guna-pct" id="sattvPct">33%</div></div>
+          <div class="guna-row"><div class="guna-label">Rajas</div><div class="guna-bar-track"><div class="guna-bar-fill r" id="rajasBar" style="width:33%"></div></div><div class="guna-pct" id="rajasPct">33%</div></div>
+          <div class="guna-row"><div class="guna-label">Tamas</div><div class="guna-bar-track"><div class="guna-bar-fill t" id="tamasBar" style="width:33%"></div></div><div class="guna-pct" id="tamasPct">33%</div></div>
+        </div>
+        <div style="font-size:9.5px;color:var(--t2);margin-top:5px;">Clarity · Action · Rest — your energy pattern</div>
+      </div>
+      <div>
+        <div class="section-label">🧿 Active Themes</div>
+        <div class="tag-cloud">
+          <span class="theme-tag" id="tag-outcome">Outcome</span>
+          <span class="theme-tag" id="tag-ego">Ego</span>
+          <span class="theme-tag" id="tag-burnout">Burnout</span>
+          <span class="theme-tag" id="tag-decision">Decision</span>
+          <span class="theme-tag" id="tag-dharma">Dharma</span>
+          <span class="theme-tag" id="tag-team">Team</span>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">✨ Quick Topics</div>
+        <button class="topic-btn" onclick="sendQuick(this.dataset.q)" id="qbtn-lost"><span>😔</span><span class="btn-txt">Lost & Demotivated</span></button>
+        <button class="topic-btn" onclick="sendQuick(this.dataset.q)" id="qbtn-conflict"><span>⚡</span><span class="btn-txt">Conflict at Work</span></button>
+        <button class="topic-btn" onclick="sendQuick(this.dataset.q)" id="qbtn-decision"><span>⚖️</span><span class="btn-txt">Hard Decision</span></button>
+        <button class="topic-btn" onclick="sendQuick(this.dataset.q)" id="qbtn-team"><span>🤝</span><span class="btn-txt">Team Performance</span></button>
+        <button class="topic-btn" onclick="sendQuick(this.dataset.q)" id="qbtn-burnout"><span>🔥</span><span class="btn-txt">Burnout & Purpose</span></button>
+        <button class="topic-btn" onclick="sendQuick(this.dataset.q)" id="qbtn-pivot"><span>🔄</span><span class="btn-txt">Career Direction</span></button>
+      </div>
+      <div class="user-profile-box">
+        <div class="section-label" style="margin-bottom:6px;">👤 Your Profile</div>
+        <div class="profile-row"><span class="profile-name" id="profileName">Loading…</span><button class="profile-edit-btn" onclick="resetProfile()">✏️ Edit</button></div>
+        <div class="profile-meta" id="profileMeta"></div>
+      </div>
+    </div>
+    <div class="sidebar-panel" id="panel-chapters">
+      <div class="chapter-search"><span style="color:var(--t2);font-size:12px;">🔍</span><input type="text" id="chSearch" placeholder="Search chapters…" oninput="filterCh(this.value)"/></div>
+      <div class="chapter-grid" id="chGrid"></div>
+    </div>
+    <div class="sidebar-panel" id="panel-dialogue">
+      <div class="section-label" style="font-size:16px;">💬 Conversational AI</div>
+      <p style="font-size:13px; color:var(--cream); line-height:1.6; margin-top:8px;">This mode is for real-time, back-and-forth dialogue. You can explain things, solve problems, or talk through ideas without specific Gita chapter formatting.</p>
+      
+      <div style="margin-top:20px; padding:12px; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,255,255,0.1);">
+        <div class="section-label" style="font-size:12px; margin-bottom:8px;">🔑 Gemini API Key</div>
+        <p style="font-size:11px; color:var(--t2); margin-bottom:8px; line-height:1.4;">Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#86efac;">aistudio.google.com</a></p>
+        <input type="password" id="geminiApiKey" placeholder="AIzaSy..." style="width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.2); color:white; font-size:12px; margin-bottom:8px;" onchange="localStorage.setItem('geminiApiKey', this.value)" />
+      </div>
+
+      <div style="margin-top:20px; padding:12px; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,255,255,0.1);">
+        <div class="section-label" style="font-size:12px; margin-bottom:8px;">🎙️ Premium Voice APIs</div>
+        <p style="font-size:11px; color:var(--t2); margin-bottom:8px; line-height:1.4;">Add keys to unlock natural, human-like voice.</p>
+        <input type="password" id="elevenLabsApiKey" placeholder="ElevenLabs API Key..." style="width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.2); color:white; font-size:12px; margin-bottom:8px;" onchange="localStorage.setItem('elevenLabsApiKey', this.value)" />
+        <input type="password" id="openAIApiKey" placeholder="OpenAI API Key..." style="width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.2); color:white; font-size:12px; margin-bottom:8px;" onchange="localStorage.setItem('openAIApiKey', this.value)" />
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="main">
+    <div id="topbar">
+      <div class="topbar-left">
+        <button id="sb-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+        <div><div class="topbar-title">GitaGuru</div><div class="topbar-sub" id="exchCount">New session</div></div>
+      </div>
+      <div class="topbar-right">
+        <span class="lang-badge" id="langBadge">🌐 English</span>
+        <button class="voice-toggle" id="resetToggle" onclick="resetChat()" style="margin-right: 8px;">
+          <span>🔄 Reset Chat</span>
+        </button>
+        <button class="voice-toggle" id="voiceToggle" onclick="toggleVoice()">
+          <div class="voice-dot"></div>
+          <span id="voiceLabel">Voice OFF</span>
+        </button>
+      </div>
+    </div>
+    <div id="messages-coach" class="msg-container active" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth;"></div>
+    <div id="messages-dialogue" class="msg-container" style="display:none;flex:1;overflow-y:auto;padding:16px;flex-direction:column;gap:14px;scroll-behavior:smooth;"></div>
+    <div style="padding:0 16px 4px;"><div id="typing"><div class="avatar guru">🪷</div><div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>
+    <div id="inputbar">
+      <div class="input-wrap">
+        <textarea id="msgInput" rows="1" placeholder="Ask Krishna anything — in your language…" maxlength="1200"></textarea>
+        <button id="micBtn" onclick="toggleMic()" title="Speak to Krishna" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;color:var(--cream);font-size:16px;">🎙️</button>
+        <button id="sendBtn" onclick="handleSend()"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button>
+      </div>
+      <div class="input-hint">Enter to send · Shift+Enter for new line</div>
+    </div>
+  </main>
+
+  <!-- KRISHNA VOICE PANEL -->
+  <div id="krishnaPanel">
+    <div class="krishna-inner">
+      <div class="krishna-img-wrap">
+        <div class="krishna-aura" id="krishnaAura1"></div>
+        <div class="krishna-aura2" id="krishnaAura2"></div>
+        <img src="krishna.png" alt="Lord Krishna" id="krishnaImg" onerror="this.style.display='none';document.getElementById('krishnaFallback').style.display='flex'"/>
+        <div id="krishnaFallback" style="display:none;position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,#1a2060,#0a1040);align-items:center;justify-content:center;font-size:64px;">🪷</div>
+      </div>
+      <div class="krishna-name">Lord Krishna</div>
+      <div class="krishna-sub">Bhagavad Gita Mentor<br/>Speaking in <span id="krishnaLangDisplay">English</span></div>
+      <div class="krishna-speaking-label hidden" id="speakingLabel">🎵 Speaking…</div>
+      <div class="krishna-lang-info" id="krishnaLangInfo">Voice ready</div>
+      <div style="display:flex; gap:5px; margin-top:8px;">
+        <button class="btn-outline" style="font-size:10px;padding:5px 10px;flex:1;justify-content:center;" onclick="window.VoiceManager.pause()">⏸ Pause</button>
+        <button class="btn-outline" style="font-size:10px;padding:5px 10px;flex:1;justify-content:center;" onclick="window.VoiceManager.resume()">▶ Resume</button>
+      </div>
+      <div style="display:flex; gap:5px; margin-top:5px; margin-bottom:5px;">
+        <button class="btn-outline" style="font-size:10px;padding:5px 10px;flex:1;justify-content:center;" onclick="window.VoiceManager.setSpeed(0.85)">🐢 Slow</button>
+        <button class="btn-outline" style="font-size:10px;padding:5px 10px;flex:1;justify-content:center;" onclick="window.VoiceManager.setSpeed(1.0)">Normal</button>
+        <button class="btn-outline" style="font-size:10px;padding:5px 10px;flex:1;justify-content:center;" onclick="window.VoiceManager.setSpeed(1.2)">Rabbit 🐇</button>
+      </div>
+      <button class="btn-outline" style="font-size:10px;padding:5px 12px;width:100%;justify-content:center;" onclick="stopVoice()">⏹ Stop Voice</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/verses_data.js"></script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/languageVoiceMap.js"></script>
+<script src="js/voiceProvider.js"></script>
+<script src="js/audioQueue.js"></script>
+<script src="js/voiceEngine.js"></script>
+<script src="js/voiceManager.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/chapters.js"></script>
+<script src="js/modal.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/search.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/onboarding.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

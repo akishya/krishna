@@ -1,0 +1,16 @@
+{
+  "name": "gitaguru",
+  "version": "1.0.0",
+  "description": "Personalized Bhagavad Gita AI Coach",
+  "main": "js/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gita",
+    "coach",
+    "ai"
+  ],
+  "author": "",
+  "license": "ISC"
+}
